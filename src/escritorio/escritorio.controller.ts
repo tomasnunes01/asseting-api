@@ -10,4 +10,8 @@ export class EscritorioController {
   async findAll(): Promise<Escritorio[]> {
     return this.escritorioService.findAll();
   }
+  @Get('teste')
+  async teste(): Promise<Escritorio[]> {
+    return this.escritorioService.findAll();
+  }
 }
