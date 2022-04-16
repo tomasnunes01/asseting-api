@@ -5,7 +5,7 @@ import {
   HttpStatus,
   forwardRef,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { Token } from './token.entity';
 import { UserService } from '../user/user.service';
 import { AuthService } from '../auth/auth.service';
@@ -21,7 +21,10 @@ export class TokenService {
   ) {}
 
   async save(hash: string, username: string) {
-    const objToken = await this.tokenRepository.findOne({ username: username });
+    const objToken = await getRepository(Token)
+      .createQueryBuilder('token')
+      .where('token.username = :username', { username: username })
+      .getOne();
     if (objToken) {
       await this.tokenRepository.update(objToken.id, { hash: hash });
     } else {
@@ -33,7 +36,10 @@ export class TokenService {
   }
 
   async refreshToken(oldToken: string) {
-    const objToken = await this.tokenRepository.findOne({ hash: oldToken });
+    const objToken = await getRepository(Token)
+      .createQueryBuilder('token')
+      .where('token.hash = :hash', { hash: oldToken })
+      .getOne();
     if (objToken) {
       const user = await this.userService.findOne(objToken.username);
       return this.authService.login(user);
@@ -41,7 +47,9 @@ export class TokenService {
       return new HttpException(
         {
           errorMessage: 'Token inválido',
-        }, HttpStatus.UNAUTHORIZED)
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 }

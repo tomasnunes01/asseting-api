@@ -7,7 +7,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { TokenModule } from '../token/token.module';
-import { UserService } from '../user/user.service';
 
 @Module({
   imports: [

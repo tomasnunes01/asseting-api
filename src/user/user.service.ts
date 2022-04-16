@@ -43,9 +43,12 @@ export class UserService {
   }
 
   async findOne(username: string): Promise<Conta | undefined> {
-    return this.userRepository.findOne({ username: username });
+    const user = await getRepository(Conta)
+      .createQueryBuilder('conta')
+      .where('conta.username = :username', { username: username })
+      .getOne();
+    return user;
   }
-
   async getUserData(username: string): Promise<Conta | undefined> {
     const user = await getRepository(Conta)
       .createQueryBuilder('conta')

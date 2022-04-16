@@ -10,7 +10,7 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     private tokenService: TokenService,
-    ) {}
+  ) {}
 
   async validarConta(username: string, password: string): Promise<any> {
     const user = await this.userService.findOne(username);
@@ -22,11 +22,10 @@ export class AuthService {
   }
   async login(user: any) {
     const payload = { username: user.username, sub: user.id };
-    const token = this.jwtService.sign(payload)
-    this.tokenService.save(token, user.username)
+    const token = this.jwtService.sign(payload);
+    await this.tokenService.save(token, user.username);
     return {
-      access_token: token
-
+      access_token: token,
     };
   }
 }
