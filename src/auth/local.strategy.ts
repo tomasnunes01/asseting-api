@@ -1,4 +1,4 @@
-import { Strategy } from "passport-local";
+import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -13,7 +13,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.validarConta(username, password);
     if (!user) {
       throw new UnauthorizedException();
-//A password só pode conter os seguintes: !$%/()=?@{[]}*
+      //A password só pode conter os seguintes: !$%/()=?@{[]}*
     }
     return user;
   }
