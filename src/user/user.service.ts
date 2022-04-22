@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { createQueryBuilder, getRepository, Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { Conta } from './user.entity';
 import { UserRegisterDto } from './dto/user.register.dto';
 import { ResultadoDto } from '../dto/resultado.dto';
@@ -28,13 +28,13 @@ export class UserService {
     conta.cod_escritorio = data.cod_escritorio;
     return this.userRepository
       .save(conta)
-      .then((result) => {
+      .then(() => {
         return <ResultadoDto>{
           status: true,
           mensagem: 'Dados Inseridos!',
         };
       })
-      .catch((error) => {
+      .catch(() => {
         return <ResultadoDto>{
           status: false,
           mensagem: 'Ocorreu um erro no pedido',
@@ -78,7 +78,7 @@ export class UserService {
             pass: bcrypt.hashSync(data.pass, 10),
           },
         )
-        .then((result) => {
+        .then(() => {
           return <ResultadoDto>{
             status: true,
             mensagem: 'Conta atualizada!',
@@ -101,7 +101,7 @@ export class UserService {
             apelido: data.apelido,
           },
         )
-        .then((result) => {
+        .then(() => {
           return <ResultadoDto>{
             status: true,
             mensagem: 'Conta atualizada!',
