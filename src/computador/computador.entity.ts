@@ -15,10 +15,13 @@ export class Computador {
   nr_serie: string;
 
   @Column()
-  cod_escritorio: number;
+  cod_escritorio?: number;
 
   @Column()
   cod_tipo: number;
+
+  @Column()
+  cod_utilizador?: number;
 
   @Column({ length: 20 })
   marca: string;
@@ -27,29 +30,29 @@ export class Computador {
   modelo: string;
 
   @Column({ length: 100 })
-  descricao: string;
+  descricao?: string;
 
   @Column({ length: 20 })
-  so: string;
+  so?: string;
 
   @Column({ length: 20 })
-  cpu: string;
+  cpu?: string;
 
   @Column()
-  ram: number;
+  ram?: number;
 
   @Column()
-  hdd: number;
+  hdd?: number;
 
   @Column()
-  garamtia: Date;
+  garantia?: Date;
 
   @Column()
-  data_instalacao: Date;
+  data_instalacao?: Date;
 
   @Column()
-  fim_emprestimo: Date;
+  fim_emprestimo?: Date;
 
   @Column()
-  aviso: number;
+  aviso?: boolean;
 }
