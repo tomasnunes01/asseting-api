@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ComputadorService } from './computador.service';
 import { Computador, TipoComputador } from './computador.entity';
 import { ResultadoDto } from 'src/dto/resultado.dto';
@@ -21,5 +29,20 @@ export class ComputadorController {
   @Get('findAll')
   async findAll(): Promise<Computador[]> {
     return this.computadorService.findAll();
+  }
+
+  @Get('findByID')
+  async findByID(@Query('id') id: string) {
+    return this.computadorService.findByID(id);
+  }
+
+  @Patch('atualizar')
+  async update(@Body() body: ComputadorRegisterDto): Promise<ResultadoDto> {
+    return await this.computadorService.atualizar(body);
+  }
+
+  @Delete()
+  async delete(@Query('nr_serie') id: string): Promise<ResultadoDto | any> {
+    return this.computadorService.delete(id);
   }
 }

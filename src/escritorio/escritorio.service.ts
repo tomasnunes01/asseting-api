@@ -2,6 +2,7 @@ import { Injectable, Inject, Body } from '@nestjs/common';
 import { ResultadoDto } from 'src/dto/resultado.dto';
 import { Repository, getRepository } from 'typeorm';
 import { EscritorioRegisterDto } from './dto/escritorio.register.dto';
+import { EscritorioUpdateDto } from './dto/escritorio.update.dto';
 import { Escritorio } from './escritorio.entity';
 
 @Injectable()
@@ -12,7 +13,11 @@ export class EscritorioService {
   ) {}
 
   async findAll(): Promise<Escritorio[]> {
-    return this.escritorioRepository.find();
+    return this.escritorioRepository.find({
+      order: {
+        morada: 'ASC',
+      },
+    });
   }
   async getCodEscritorio(
     @Body() data: string,
@@ -24,6 +29,7 @@ export class EscritorioService {
       .getOne();
     return escritorio;
   }
+
   async findByID(id: number): Promise<Escritorio | undefined> {
     const escritorio = await getRepository(Escritorio)
       .createQueryBuilder('escritorio')
@@ -43,6 +49,30 @@ export class EscritorioService {
         return <ResultadoDto>{
           status: true,
           mensagem: 'Escritório adicionado!',
+        };
+      })
+      .catch((error) => {
+        return <ResultadoDto>{
+          status: false,
+          mensagem: 'Ocorreu um erro no pedido: ' + error,
+        };
+      });
+  }
+
+  async atualizar(data: EscritorioUpdateDto): Promise<ResultadoDto> {
+    return this.escritorioRepository
+      .update(
+        { cod_escritorio: data.cod_escritorio },
+        {
+          morada: data.morada,
+          tipo: data.tipo,
+          helpdesk: data.helpdesk,
+        },
+      )
+      .then(() => {
+        return <ResultadoDto>{
+          status: true,
+          mensagem: 'Conta atualizada!',
         };
       })
       .catch((error) => {

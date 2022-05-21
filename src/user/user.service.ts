@@ -15,7 +15,12 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<Conta[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      order: {
+        nome: 'ASC',
+        apelido: 'ASC',
+      },
+    });
   }
 
   async registar(data: UserRegisterDto): Promise<ResultadoDto> {

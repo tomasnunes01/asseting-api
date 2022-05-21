@@ -1,6 +1,6 @@
 export interface ComputadorRegisterDto {
   nr_serie: string;
-  username?: number;
+  cod_utilizador?: number;
   cod_escritorio?: number;
   cod_tipo?: number;
   marca: string;

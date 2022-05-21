@@ -1,8 +1,17 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Escritorio } from './escritorio.entity';
 import { EscritorioService } from './escritorio.service';
 import { ResultadoDto } from '../dto/resultado.dto';
 import { EscritorioRegisterDto } from './dto/escritorio.register.dto';
+import { EscritorioUpdateDto } from './dto/escritorio.update.dto';
 
 @Controller('escritorio')
 export class EscritorioController {
@@ -20,6 +29,11 @@ export class EscritorioController {
   @Post('registar')
   async register(@Body() data: EscritorioRegisterDto): Promise<ResultadoDto> {
     return this.escritorioService.registar(data);
+  }
+
+  @Patch('atualizar')
+  async update(@Body() body: EscritorioUpdateDto): Promise<ResultadoDto> {
+    return await this.escritorioService.atualizar(body);
   }
 
   @Delete()

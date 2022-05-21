@@ -14,13 +14,17 @@ export class ComputadorService {
   ) {}
 
   async listTypes(): Promise<TipoComputador[]> {
-    return this.tipoComputadorRepository.find();
+    return this.tipoComputadorRepository.find({
+      order: {
+        tipo: 'ASC',
+      },
+    });
   }
 
   async registar(data: ComputadorRegisterDto): Promise<ResultadoDto> {
     const computador = new Computador();
     computador.nr_serie = data.nr_serie;
-    computador.cod_utilizador = data.username;
+    computador.cod_utilizador = data.cod_utilizador;
     computador.cod_escritorio = data.cod_escritorio;
     computador.cod_tipo = data.cod_tipo;
     computador.marca = data.marca;
@@ -51,6 +55,71 @@ export class ComputadorService {
   }
 
   async findAll(): Promise<Computador[]> {
-    return this.computadorRepository.find();
+    return this.computadorRepository.find({
+      order: {
+        marca: 'ASC',
+        modelo: 'ASC',
+        nr_serie: 'ASC',
+      },
+    });
+  }
+
+  async findByID(id: string): Promise<Computador | undefined> {
+    const computador = await getRepository(Computador)
+      .createQueryBuilder('computador')
+      .where('computador.nr_serie = :id', { id: id })
+      .getOne();
+    return computador;
+  }
+
+  async atualizar(data: ComputadorRegisterDto): Promise<ResultadoDto> {
+    return this.computadorRepository
+      .update(
+        { nr_serie: data.nr_serie },
+        {
+          cod_utilizador: data.cod_utilizador,
+          cod_escritorio: data.cod_escritorio,
+          cod_tipo: data.cod_tipo,
+          marca: data.marca,
+          modelo: data.modelo,
+          descricao: data.descricao,
+          so: data.so,
+          cpu: data.cpu,
+          ram: data.ram,
+          hdd: data.hdd,
+          garantia: data.garantia,
+          data_instalacao: data.data_instalacao,
+          fim_emprestimo: data.fim_emprestimo,
+        },
+      )
+      .then(() => {
+        return <ResultadoDto>{
+          status: true,
+          mensagem: 'Computador atualizado!',
+        };
+      })
+      .catch((error) => {
+        return <ResultadoDto>{
+          status: false,
+          mensagem: 'Ocorreu um erro no pedido: ' + error,
+        };
+      });
+  }
+
+  async delete(nr_serie: string): Promise<ResultadoDto> {
+    return this.computadorRepository
+      .delete(nr_serie)
+      .then(() => {
+        return <ResultadoDto>{
+          status: true,
+          mensagem: 'O computador foi removido',
+        };
+      })
+      .catch((error) => {
+        return <ResultadoDto>{
+          status: false,
+          mensagem: 'Ocorreu um erro no pedido: ' + error,
+        };
+      });
   }
 }
