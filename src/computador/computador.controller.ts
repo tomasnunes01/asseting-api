@@ -21,6 +21,11 @@ export class ComputadorController {
     return this.computadorService.listTypes();
   }
 
+  @Get('findTypeByID')
+  async findTypeByID(@Query('id') id: string) {
+    return this.computadorService.findTypeByID(id);
+  }
+
   @Post('registar')
   async register(@Body() data: ComputadorRegisterDto): Promise<ResultadoDto> {
     return this.computadorService.registar(data);

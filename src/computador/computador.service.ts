@@ -21,6 +21,14 @@ export class ComputadorService {
     });
   }
 
+  async findTypeByID(id: string): Promise<TipoComputador | undefined> {
+    const computador = await getRepository(TipoComputador)
+      .createQueryBuilder('tipo_computador')
+      .where('tipo_computador.cod_tipo = :id', { id: id })
+      .getOne();
+    return computador;
+  }
+
   async registar(data: ComputadorRegisterDto): Promise<ResultadoDto> {
     const computador = new Computador();
     computador.nr_serie = data.nr_serie;
