@@ -5,7 +5,7 @@ import { UserRegisterDto } from './dto/user.register.dto';
 import { ResultadoDto } from '../dto/resultado.dto';
 import * as bcrypt from 'bcrypt';
 import { UserUpdateDto } from './dto/user.update.dto';
-import { groupCollapsed } from 'console';
+
 
 @Injectable()
 export class UserService {
@@ -22,7 +22,6 @@ export class UserService {
       },
     });
   }
-
   async registar(data: UserRegisterDto): Promise<ResultadoDto> {
     const conta = new Conta();
     conta.username = data.username;

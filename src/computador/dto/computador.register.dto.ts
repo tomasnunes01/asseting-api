@@ -1,3 +1,5 @@
+import { Escritorio } from 'src/escritorio/escritorio.entity';
+
 export interface ComputadorRegisterDto {
   nr_serie: string;
   cod_utilizador?: number;

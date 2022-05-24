@@ -4,9 +4,15 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.modules';
 import { EscritorioModule } from './escritorio/escritorio.module';
 import { ComputadorModule } from './computador/computador.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [UserModule, EscritorioModule, ComputadorModule],
+  imports: [
+    ComputadorModule,
+    EscritorioModule,
+    UserModule,
+    ScheduleModule.forRoot(),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

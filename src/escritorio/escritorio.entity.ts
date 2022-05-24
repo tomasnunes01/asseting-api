@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Computador } from 'src/computador/computador.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Escritorio {
@@ -13,4 +14,7 @@ export class Escritorio {
 
   @Column({ length: 45 })
   helpdesk?: string;
+
+  @OneToMany(() => Computador, (computador) => computador.morada)
+  moradaComputador: Computador[];
 }

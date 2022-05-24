@@ -1,8 +1,9 @@
-import { Injectable, Inject, Body } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 import { ResultadoDto } from 'src/dto/resultado.dto';
 import { Repository, getRepository } from 'typeorm';
 import { Computador, TipoComputador } from './computador.entity';
 import { ComputadorRegisterDto } from './dto/computador.register.dto';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class ComputadorService {
@@ -12,6 +13,7 @@ export class ComputadorService {
     @Inject('TIPOCOMPUTADOR_REPOSITORY')
     private tipoComputadorRepository: Repository<TipoComputador>,
   ) {}
+  private readonly logger = new Logger(ComputadorService.name);
 
   async listTypes(): Promise<TipoComputador[]> {
     return this.tipoComputadorRepository.find({
@@ -20,7 +22,6 @@ export class ComputadorService {
       },
     });
   }
-
   async findTypeByID(id: string): Promise<TipoComputador | undefined> {
     const computador = await getRepository(TipoComputador)
       .createQueryBuilder('tipo_computador')
@@ -28,7 +29,6 @@ export class ComputadorService {
       .getOne();
     return computador;
   }
-
   async registar(data: ComputadorRegisterDto): Promise<ResultadoDto> {
     const computador = new Computador();
     computador.nr_serie = data.nr_serie;
@@ -61,7 +61,6 @@ export class ComputadorService {
         };
       });
   }
-
   async findAll(): Promise<Computador[]> {
     return this.computadorRepository.find({
       order: {
@@ -71,7 +70,6 @@ export class ComputadorService {
       },
     });
   }
-
   async findByID(id: string): Promise<Computador | undefined> {
     const computador = await getRepository(Computador)
       .createQueryBuilder('computador')
@@ -79,7 +77,6 @@ export class ComputadorService {
       .getOne();
     return computador;
   }
-
   async atualizar(data: ComputadorRegisterDto): Promise<ResultadoDto> {
     return this.computadorRepository
       .update(
@@ -113,7 +110,6 @@ export class ComputadorService {
         };
       });
   }
-
   async delete(nr_serie: string): Promise<ResultadoDto> {
     return this.computadorRepository
       .delete(nr_serie)
@@ -129,5 +125,15 @@ export class ComputadorService {
           mensagem: 'Ocorreu um erro no pedido: ' + error,
         };
       });
+  }
+
+  //@Cron('45 * * * * *')
+  async handleCron() {
+    this.logger.debug('Called when the current second is 25');
+    const emprestimo = await getRepository(Computador)
+      .createQueryBuilder('computador')
+      .innerJoin('computador.cod_escritorio', 'escritorio')
+      .getMany();
+    console.log(emprestimo);
   }
 }

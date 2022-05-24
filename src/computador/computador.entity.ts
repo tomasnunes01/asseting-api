@@ -1,4 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { escritorioProviders } from 'src/escritorio/escritorio.providers';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  PrimaryColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+import { Escritorio } from 'src/escritorio/escritorio.entity';
 
 @Entity()
 export class TipoComputador {
@@ -16,6 +25,12 @@ export class Computador {
 
   @Column()
   cod_escritorio?: number;
+
+  @ManyToOne(() => Escritorio, (escritorio) => escritorio.moradaComputador, {
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  morada?: Escritorio;
 
   @Column()
   cod_tipo: number;
