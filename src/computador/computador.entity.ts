@@ -6,6 +6,7 @@ import {
   PrimaryColumn,
   OneToMany,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { Escritorio } from 'src/escritorio/escritorio.entity';
 
@@ -23,14 +24,8 @@ export class Computador {
   @PrimaryColumn({ length: 30 })
   nr_serie: string;
 
-  @Column()
-  cod_escritorio?: number;
-
-  @ManyToOne(() => Escritorio, (escritorio) => escritorio.moradaComputador, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
-  })
-  morada?: Escritorio;
+  @OneToOne(() => Escritorio, (escritorio) => escritorio.cod_escritorio)
+  cod_escritorio?: Escritorio;
 
   @Column()
   cod_tipo: number;

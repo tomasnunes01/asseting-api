@@ -12,9 +12,6 @@ export class Escritorio {
   @Column({ length: 45 })
   tipo?: string;
 
-  @Column({ length: 45 })
-  helpdesk?: string;
-
-  @OneToMany(() => Computador, (computador) => computador.morada)
-  moradaComputador: Computador[];
+  @OneToMany(() => Computador, (computador) => computador.nr_serie)
+  helpdesk?: Computador[];
 }
