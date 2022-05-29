@@ -6,7 +6,6 @@ import { ResultadoDto } from '../dto/resultado.dto';
 import * as bcrypt from 'bcrypt';
 import { UserUpdateDto } from './dto/user.update.dto';
 
-
 @Injectable()
 export class UserService {
   constructor(

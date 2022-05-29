@@ -3,7 +3,7 @@ import { Escritorio } from 'src/escritorio/escritorio.entity';
 export interface ComputadorRegisterDto {
   nr_serie: string;
   cod_utilizador?: number;
-  cod_escritorio?: number;
+  cod_escritorio?: Escritorio;
   cod_tipo?: number;
   marca: string;
   modelo: string;

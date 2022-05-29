@@ -73,6 +73,7 @@ export class ComputadorService {
   async findByID(id: string): Promise<Computador | undefined> {
     const computador = await getRepository(Computador)
       .createQueryBuilder('computador')
+      .innerJoinAndSelect('computador.cod_escritorio', 'escritorio')
       .where('computador.nr_serie = :id', { id: id })
       .getOne();
     return computador;
@@ -129,10 +130,10 @@ export class ComputadorService {
 
   //@Cron('45 * * * * *')
   async handleCron() {
-    this.logger.debug('Called when the current second is 25');
+    this.logger.debug('Called when the current second is 45');
     const emprestimo = await getRepository(Computador)
       .createQueryBuilder('computador')
-      .innerJoin('computador.cod_escritorio', 'escritorio')
+      .innerJoinAndSelect('computador.cod_escritorio', 'escritorio')
       .getMany();
     console.log(emprestimo);
   }

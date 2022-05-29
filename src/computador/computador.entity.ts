@@ -1,10 +1,8 @@
-import { escritorioProviders } from 'src/escritorio/escritorio.providers';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   PrimaryColumn,
-  OneToMany,
   ManyToOne,
 } from 'typeorm';
 import { Escritorio } from 'src/escritorio/escritorio.entity';
@@ -23,14 +21,11 @@ export class Computador {
   @PrimaryColumn({ length: 30 })
   nr_serie: string;
 
-  @Column()
-  cod_escritorio?: number;
-
-  @ManyToOne(() => Escritorio, (escritorio) => escritorio.moradaComputador, {
+  @ManyToOne(() => Escritorio, (escritorio) => escritorio.computadores, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
-  morada?: Escritorio;
+  cod_escritorio?: Escritorio;
 
   @Column()
   cod_tipo: number;
@@ -44,19 +39,28 @@ export class Computador {
   @Column({ length: 20 })
   modelo: string;
 
-  @Column({ length: 100 })
+  @Column({
+    length: 100,
+    nullable: true,
+  })
   descricao?: string;
 
-  @Column({ length: 20 })
+  @Column({
+    length: 20,
+    nullable: true,
+  })
   so?: string;
 
-  @Column({ length: 20 })
+  @Column({
+    length: 20,
+    nullable: true,
+  })
   cpu?: string;
 
-  @Column()
+  @Column({ nullable: true })
   ram?: number;
 
-  @Column()
+  @Column({ nullable: true })
   hdd?: number;
 
   @Column()
