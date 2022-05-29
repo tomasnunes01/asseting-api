@@ -17,7 +17,7 @@ export class ComputadorController {
   constructor(private readonly computadorService: ComputadorService) {}
 
   @Get('listTypes')
-  async listTypes(): Promise<TipoComputador[] | void> {
+  async listTypes(): Promise<TipoComputador[]> {
     return this.computadorService.listTypes();
   }
 
