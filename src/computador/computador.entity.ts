@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   PrimaryColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Escritorio } from 'src/escritorio/escritorio.entity';
+import { Software } from 'src/software/software.entity';
 
 @Entity()
 export class TipoComputador {
@@ -74,4 +76,7 @@ export class Computador {
 
   @Column()
   aviso?: boolean;
+
+  @OneToMany(() => Software, (software) => software.computador)
+  software: Software[];
 }
