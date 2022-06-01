@@ -4,6 +4,7 @@ import { Repository, getRepository } from 'typeorm';
 import { Computador, TipoComputador } from './computador.entity';
 import { ComputadorRegisterDto } from './dto/computador.register.dto';
 import { Cron } from '@nestjs/schedule';
+import { EmailService } from 'src/emailer/email.service';
 
 @Injectable()
 export class ComputadorService {
@@ -12,6 +13,7 @@ export class ComputadorService {
     private computadorRepository: Repository<Computador>,
     @Inject('TIPOCOMPUTADOR_REPOSITORY')
     private tipoComputadorRepository: Repository<TipoComputador>,
+    private emailService: EmailService,
   ) {}
   private readonly logger = new Logger(ComputadorService.name);
 
@@ -128,13 +130,29 @@ export class ComputadorService {
       });
   }
 
-  //@Cron('45 * * * * *')
-  async handleCron() {
-    this.logger.debug('Called when the current second is 45');
+  @Cron('* 30 1 * * *')
+  async Cron_fimEmprestimo() {
+    const subj = 'Aviso de fim de empréstimo!';
     const emprestimo = await getRepository(Computador)
       .createQueryBuilder('computador')
       .innerJoinAndSelect('computador.cod_escritorio', 'escritorio')
       .getMany();
-    console.log(emprestimo);
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 30);
+    emprestimo.map((value) => {
+      if (endDate >= value.fim_emprestimo && !value.aviso) {
+        this.emailService.sendEmail(
+          value.cod_escritorio.helpdesk,
+          subj,
+          '<p> Faltam 30 dias para o término do empréstimo do computador com o Número de Série: ' +
+            value.nr_serie +
+            '</p>',
+        );
+        this.computadorRepository.update(
+          { nr_serie: value.nr_serie },
+          { aviso: true },
+        );
+      }
+    });
   }
 }
