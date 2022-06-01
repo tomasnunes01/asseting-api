@@ -4,6 +4,7 @@ import { Repository, getRepository } from 'typeorm';
 import { Computador, TipoComputador } from './computador.entity';
 import { ComputadorRegisterDto } from './dto/computador.register.dto';
 import { Cron } from '@nestjs/schedule';
+import { EmailService } from 'src/emailer/email.service';
 
 @Injectable()
 export class ComputadorService {
@@ -12,6 +13,7 @@ export class ComputadorService {
     private computadorRepository: Repository<Computador>,
     @Inject('TIPOCOMPUTADOR_REPOSITORY')
     private tipoComputadorRepository: Repository<TipoComputador>,
+    private emailService: EmailService,
   ) {}
   private readonly logger = new Logger(ComputadorService.name);
 
@@ -128,6 +130,10 @@ export class ComputadorService {
       });
   }
 
+  public emailer() {
+    console.log('test');
+  }
+
   //@Cron('45 * * * * *')
   async handleCron() {
     this.logger.debug('Called when the current second is 45');
@@ -135,6 +141,12 @@ export class ComputadorService {
       .createQueryBuilder('computador')
       .innerJoinAndSelect('computador.cod_escritorio', 'escritorio')
       .getMany();
-    console.log(emprestimo);
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 30);
+    emprestimo.forEach(function (value) {
+      if (endDate >= value.fim_emprestimo && !value.aviso) {
+        console.log(value.cod_escritorio.helpdesk);
+      }
+    });
   }
 }
