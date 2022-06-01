@@ -53,6 +53,6 @@ export class ComputadorController {
 
   @Get('handleCron')
   async handleCron() {
-    return this.computadorService.handleCron();
+    return this.computadorService.Cron_fimEmprestimo();
   }
 }

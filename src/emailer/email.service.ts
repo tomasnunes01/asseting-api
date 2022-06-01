@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { ResultadoDto } from 'src/dto/resultado.dto';
 
 @Injectable()
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  public sendEmail(): any {
+  public sendEmail(destino: string, subj: string, texto: string): any {
     this.mailerService
       .sendMail({
-        to: 'assetingwarning@gmail.com', // list of receivers
-        from: 'Asseting Warning', // sender address
-        subject: 'Testing Nest MailerModule ✔', // Subject line
-        //text: 'welcome', // plaintext body
-        html: '<b>welcome</b>', // HTML body content
+        to: 'assetingwarning@gmail.com',
+        from: 'Asseting Warning',
+        subject: subj,
+        html: texto,
       })
       .then(() => {
-        console.log('Sucesso');
+        return <ResultadoDto>{
+          status: true,
+          mensagem: 'Sucesso',
+        };
       })
       .catch((error) => {
-        console.log('Erro:' + error);
+        return <ResultadoDto>{
+          status: false,
+          mensagem: 'Ocorreu um erro no pedido: ' + error,
+        };
       });
-    return 'Fim';
   }
 }
-//destino: string, subj: string
