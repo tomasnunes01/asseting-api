@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { EmailService } from './email.service';
-import { EmailController } from './email.controller';
 
 @Module({
   imports: [
@@ -36,7 +35,7 @@ import { EmailController } from './email.controller';
     }),
     ConfigModule.forRoot(),
   ],
-  controllers: [EmailController],
+  controllers: [],
   providers: [EmailService],
   exports: [EmailService],
 })
