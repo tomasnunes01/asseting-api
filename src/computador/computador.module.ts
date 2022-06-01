@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { EmailModule } from 'src/emailer/email.module';
 import { DatabaseModule } from '../database/database.module';
 import { ComputadorController } from './computador.controller';
 import {
@@ -8,7 +9,7 @@ import {
 import { ComputadorService } from './computador.service';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, EmailModule],
   controllers: [ComputadorController],
   providers: [
     ...computadorProviders,

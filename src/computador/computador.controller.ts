@@ -50,4 +50,9 @@ export class ComputadorController {
   async delete(@Query('nr_serie') id: string): Promise<ResultadoDto | any> {
     return this.computadorService.delete(id);
   }
+
+  @Get('handleCron')
+  async handleCron() {
+    return this.computadorService.handleCron();
+  }
 }
