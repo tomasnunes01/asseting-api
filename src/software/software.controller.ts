@@ -1,40 +1,56 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { SoftwareService } from './software.service';
-import { Software } from './software.entity';
+import { Software, TipoLicenca, TipoSoftware } from './software.entity';
+import { SoftwareRegisterDto } from './dto/software.register.dto';
+import { ResultadoDto } from 'src/dto/resultado.dto';
+import { ComputadorRegisterDto } from 'src/computador/dto/computador.register.dto';
 
 @Controller('software')
 export class SoftwareController {
   constructor(private readonly softwareService: SoftwareService) {}
 
-  /* @Get('listTypes')
-  async listTypes(): Promise<TipoComputador[]> {
-    return this.computadorService.listTypes();
+  @Get('listTypes')
+  async listTypes(): Promise<TipoSoftware[]> {
+    return this.softwareService.listTypes();
+  }
+
+  @Get('listLicenses')
+  async listLicenses(): Promise<TipoLicenca[]> {
+    return this.softwareService.listLicenses();
   }
 
   @Get('findTypeByID')
-  async findTypeByID(@Query('id') id: string) {
-    return this.computadorService.findTypeByID(id);
+  async findTypeByID(@Query('id') id: number) {
+    return this.softwareService.findTypeByID(id);
   }
 
   @Post('registar')
-  async register(@Body() data: ComputadorRegisterDto): Promise<ResultadoDto> {
-    return this.computadorService.registar(data);
+  async register(@Body() data: SoftwareRegisterDto): Promise<ResultadoDto> {
+    return this.softwareService.registar(data);
   }
 
   @Get('findByID')
   async findByID(@Query('id') id: string) {
-    return this.computadorService.findByID(id);
+    return this.softwareService.findByID(id);
   }
 
   @Patch('atualizar')
   async update(@Body() body: ComputadorRegisterDto): Promise<ResultadoDto> {
-    return await this.computadorService.atualizar(body);
+    return await this.softwareService.atualizar(body);
   }
 
   @Delete()
   async delete(@Query('nr_serie') id: string): Promise<ResultadoDto | any> {
-    return this.computadorService.delete(id);
-  } */
+    return this.softwareService.delete(id);
+  }
 
   @Get('findAll')
   async findAll(): Promise<Software[]> {

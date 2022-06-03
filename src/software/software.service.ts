@@ -1,5 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { ResultadoDto } from 'src/dto/resultado.dto';
+import { getRepository, Repository } from 'typeorm';
+import { SoftwareRegisterDto } from './dto/software.register.dto';
 import { Software, TipoLicenca, TipoSoftware } from './software.entity';
 
 @Injectable()
@@ -13,39 +15,43 @@ export class SoftwareService {
     private tipoLicencaRepository: Repository<TipoLicenca>,
   ) {}
 
-  async listTypes(): Promise<TipoLicenca[]> {
+  async listTypes(): Promise<TipoSoftware[]> {
+    return this.tipoSoftwareRepository.find({
+      order: {
+        tipo: 'ASC',
+      },
+    });
+  }
+
+  async listLicenses(): Promise<TipoLicenca[]> {
     return this.tipoLicencaRepository.find({
       order: {
         tipo: 'ASC',
       },
     });
   }
-  /* async findTypeByID(id: string): Promise<TipoComputador | undefined> {
-    const computador = await getRepository(TipoComputador)
-      .createQueryBuilder('tipo_computador')
-      .where('tipo_computador.cod_tipo = :id', { id: id })
+  async findTypeByID(id: number): Promise<TipoSoftware | undefined> {
+    const software = await getRepository(TipoSoftware)
+      .createQueryBuilder('tipo_software')
+      .where('tipo_software.cod_tipo = :id', { id: id })
       .getOne();
-    return computador;
-  } 
-  async registar(data: ComputadorRegisterDto): Promise<ResultadoDto> {
-    const computador = new Computador();
-    computador.nr_serie = data.nr_serie;
-    computador.cod_utilizador = data.cod_utilizador;
-    computador.cod_escritorio = data.cod_escritorio;
-    computador.cod_tipo = data.cod_tipo;
-    computador.marca = data.marca;
-    computador.modelo = data.modelo;
-    computador.descricao = data.descricao;
-    computador.so = data.so;
-    computador.cpu = data.cpu;
-    computador.ram = data.ram;
-    computador.hdd = data.hdd;
-    computador.garantia = data.garantia;
-    computador.data_instalacao = data.data_instalacao;
-    computador.fim_emprestimo = data.fim_emprestimo;
-    computador.aviso = data.aviso;
-    return this.computadorRepository
-      .save(computador)
+    return software;
+  }
+
+  async registar(data: SoftwareRegisterDto): Promise<ResultadoDto> {
+    const software = new Software();
+    software.nr_serie = data.nr_serie;
+    software.fabricante = data.fabricante;
+    software.versao = data.versao;
+    software.descricao = data.descricao;
+    software.chave = data.chave;
+    software.cod_tipo_licenca = data.cod_tipo_licenca;
+    software.cod_tipo_software = data.cod_tipo_software;
+    software.computador = data.computador;
+    software.validade = data.validade;
+
+    return this.softwareRepository
+      .save(software)
       .then(() => {
         return <ResultadoDto>{
           status: true,
@@ -58,7 +64,7 @@ export class SoftwareService {
           mensagem: 'Ocorreu um erro no pedido: ' + error,
         };
       });
-  } */
+  }
 
   async findAll(): Promise<Software[]> {
     return this.softwareRepository.find({
@@ -69,13 +75,14 @@ export class SoftwareService {
       },
     });
   }
-  /* async findByID(id: string): Promise<Computador | undefined> {
-    const computador = await getRepository(Computador)
-      .createQueryBuilder('computador')
-      .innerJoinAndSelect('computador.cod_escritorio', 'escritorio')
+
+  async findByID(id: string): Promise<Software | undefined> {
+    const software = await getRepository(Software)
+      .createQueryBuilder('software')
+      .innerJoinAndSelect('software.cod_escritorio', 'escritorio')
       .where('computador.nr_serie = :id', { id: id })
       .getOne();
-    return computador;
+    return software;
   }
   async atualizar(data: ComputadorRegisterDto): Promise<ResultadoDto> {
     return this.computadorRepository
@@ -125,5 +132,5 @@ export class SoftwareService {
           mensagem: 'Ocorreu um erro no pedido: ' + error,
         };
       });
-  } */
+  }
 }
