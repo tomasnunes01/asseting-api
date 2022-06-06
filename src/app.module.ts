@@ -6,6 +6,7 @@ import { EscritorioModule } from './escritorio/escritorio.module';
 import { ComputadorModule } from './computador/computador.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SoftwareModule } from './software/software.module';
+import { EmailModule } from './emailer/email.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { SoftwareModule } from './software/software.module';
     UserModule,
     ScheduleModule.forRoot(),
     SoftwareModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
