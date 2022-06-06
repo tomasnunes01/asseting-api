@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ResultadoDto } from 'src/dto/resultado.dto';
 import { getRepository, Repository } from 'typeorm';
 import { SoftwareRegisterDto } from './dto/software.register.dto';
+import { SoftwareUpdateDto } from './dto/software.update.dto';
 import { Software, TipoLicenca, TipoSoftware } from './software.entity';
 
 @Injectable()
@@ -79,35 +80,35 @@ export class SoftwareService {
   async findByID(id: string): Promise<Software | undefined> {
     const software = await getRepository(Software)
       .createQueryBuilder('software')
-      .innerJoinAndSelect('software.cod_escritorio', 'escritorio')
-      .where('computador.nr_serie = :id', { id: id })
+      .innerJoinAndSelect('software.cod_tipo_software', 'tipo_software')
+      .innerJoinAndSelect('software.cod_tipo_licenca', 'tipo_licenca')
+      .innerJoinAndSelect('software.computador', 'computador')
+      .innerJoinAndSelect('computador.cod_escritorio', 'escritorio')
+      .where('software.id = :id', { id: id })
       .getOne();
     return software;
   }
-  async atualizar(data: ComputadorRegisterDto): Promise<ResultadoDto> {
-    return this.computadorRepository
+
+  async atualizar(data: SoftwareUpdateDto): Promise<ResultadoDto> {
+    return this.softwareRepository
       .update(
-        { nr_serie: data.nr_serie },
+        { id: data.id },
         {
-          cod_utilizador: data.cod_utilizador,
-          cod_escritorio: data.cod_escritorio,
-          cod_tipo: data.cod_tipo,
-          marca: data.marca,
-          modelo: data.modelo,
+          nr_serie: data.nr_serie,
+          cod_tipo_software: data.cod_tipo_software,
+          cod_tipo_licenca: data.cod_tipo_licenca,
+          computador: data.computador,
+          fabricante: data.fabricante,
+          versao: data.versao,
           descricao: data.descricao,
-          so: data.so,
-          cpu: data.cpu,
-          ram: data.ram,
-          hdd: data.hdd,
-          garantia: data.garantia,
-          data_instalacao: data.data_instalacao,
-          fim_emprestimo: data.fim_emprestimo,
+          chave: data.chave,
+          validade: data.validade,
         },
       )
       .then(() => {
         return <ResultadoDto>{
           status: true,
-          mensagem: 'Computador atualizado!',
+          mensagem: 'Software atualizado!',
         };
       })
       .catch((error) => {
@@ -117,13 +118,13 @@ export class SoftwareService {
         };
       });
   }
-  async delete(nr_serie: string): Promise<ResultadoDto> {
-    return this.computadorRepository
-      .delete(nr_serie)
+  async delete(id: number): Promise<ResultadoDto> {
+    return this.softwareRepository
+      .delete(id)
       .then(() => {
         return <ResultadoDto>{
           status: true,
-          mensagem: 'O computador foi removido',
+          mensagem: 'O software foi removido',
         };
       })
       .catch((error) => {
