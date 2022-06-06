@@ -5,6 +5,7 @@ import { UserModule } from './user/user.modules';
 import { EscritorioModule } from './escritorio/escritorio.module';
 import { ComputadorModule } from './computador/computador.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SoftwareModule } from './software/software.module';
 import { EmailModule } from './emailer/email.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { EmailModule } from './emailer/email.module';
     EscritorioModule,
     UserModule,
     ScheduleModule.forRoot(),
+    SoftwareModule,
     EmailModule,
   ],
   controllers: [AppController],
