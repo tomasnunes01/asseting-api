@@ -56,7 +56,7 @@ export class SoftwareService {
       .then(() => {
         return <ResultadoDto>{
           status: true,
-          mensagem: 'Computador adicionado!',
+          mensagem: 'Software adicionado!',
         };
       })
       .catch((error) => {

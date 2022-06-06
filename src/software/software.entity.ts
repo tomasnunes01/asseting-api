@@ -36,7 +36,7 @@ export class Software {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 45, nullable: true, unique: true })
+  @Column({ length: 45, unique: true })
   nr_serie: string;
 
   @ManyToOne(() => TipoSoftware, (tipoSoftware) => tipoSoftware.software, {
@@ -57,11 +57,11 @@ export class Software {
   })
   computador?: Computador;
 
-  @Column({ length: 20, nullable: true })
-  fabricante?: string;
+  @Column({ length: 20 })
+  fabricante: string;
 
-  @Column({ length: 20, nullable: true })
-  versao?: string;
+  @Column({ length: 20 })
+  versao: string;
 
   @Column({
     length: 100,
